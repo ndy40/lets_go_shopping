@@ -1,0 +1,11 @@
+api_platform:
+    title: 'Lets Go Shopping'
+    description: 'A collection of API Endpoints for Shopping'
+    version: '0.1.0'
+    show_webby: false
+    mapping:
+        paths: ['%kernel.project_dir%/src/Entity', '%kernel.project_dir%/src/Http/Requests']
+    patch_formats:
+        json: ['application/merge-patch+json']
+    swagger:
+        versions: [3]
