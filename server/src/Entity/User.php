@@ -4,15 +4,19 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
+use App\Traits\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Http\Requests\SignUpRequests;
+use App\Http\Requests\ChangePasswordRequests;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="users")
+ * @ORM\HasLifecycleCallbacks()
  * @ApiResource(
  *     shortName="users",
  *     normalizationContext={"groups"={"user:read"}},
@@ -21,23 +25,24 @@ use App\Http\Requests\SignUpRequests;
  *      "register"={
  *          "method"="post",
  *          "path"="/users/register",
- *          "input"=SignUpRequests::class,
+ *          "input"=SignUpRequests::class
  *       },
  *       "reset_password"={
  *          "method": "POST",
  *          "path"="/users/reset_password",
- *          "denormalization_context"={"groups"={"user:reset_password"}}
  *       },
  *       "change_password"={
  *          "method"="POST",
  *          "path"="/users/change_password",
- *          "denormalization_context"={"groups"={"user:change_password"}}
+ *          "input"=ChangePasswordRequests::class
  *       }
  *     }
  * )
  */
 class User implements UserInterface
 {
+    use TimestampableEntity, TimestampableTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

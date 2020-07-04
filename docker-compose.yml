@@ -35,9 +35,11 @@ services:
       - DATABASE_URL=mysql://shopping_list:shopping_list@db:3306/shopping_list?
     depends_on:
       - db
+      - dev-tls
     volumes:
       - ./server:/var/www/html
-#      - ./server/docker/php/conf.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - dev-certs:/var/www/certs
+      - ./server/docker/php/conf.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
     networks:
       - httpd
       - dbnetwork
@@ -58,8 +60,18 @@ services:
     networks:
       - dbnetwork
 
+  dev-tls:
+    build:
+      context: ./server
+      <<: *server-cache-from
+      target: dev-certs
+    volumes:
+      - dev-certs:/certs
+
+
 volumes:
   db-data:
+  dev-certs:
 
 networks:
   httpd:

@@ -28,3 +28,9 @@ services:
 
     # Data Transformers
     App\DataTransformer\SignUpDataTransformer:
+    App\DataTransformer\ChangePasswordDataTransformer:
+
+    # Event Subscribers
+    App\Events\Listeners\UserCreateEventListener:
+        tags:
+            - { name: doctrine.event_subscriber }
