@@ -8,7 +8,8 @@ RUN set -ex \
     && wget -q -O mkcert https://github.com/FiloSottile/mkcert/releases/download/v1.4.1/mkcert-v1.4.1-linux-amd64 \
     && chmod +x mkcert \
     && ./mkcert -install \
-    && ./mkcert localhost
+    && ./mkcert localhost; \
+    chmod a+r localhost*
 
 VOLUME /certs
 
