@@ -11,6 +11,7 @@ namespace App\DataTransformer;
 
 
 use App\Entity\User;
+use App\Http\Requests\SignUpRequests;
 use App\Services\HydratorService;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -45,6 +46,8 @@ class SignUpDataTransformer implements \ApiPlatform\Core\DataTransformer\DataTra
             return false;
         }
 
-        return User::class === $to && null !== ($context['input']['class'] ?? null);
+        return User::class === $to
+            && null !== ($context['input']['class'] ?? null)
+            && $context['input']['class'] === SignUpRequests::class;
     }
 }

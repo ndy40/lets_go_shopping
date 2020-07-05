@@ -25,7 +25,8 @@ class ChangePasswordRequests
      * @var string
      * @Assert\NotBlank()
      * @Assert\Type(type="string")
-     * @Assert\EqualTo(propertyPath="confirmPassword")
+     * @Assert\EqualTo(propertyPath="confirmPassword",
+     *     message="Password and Password confirmation do not match.")
      */
     public $password;
 

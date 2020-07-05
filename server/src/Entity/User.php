@@ -30,6 +30,7 @@ use App\Http\Requests\ChangePasswordRequests;
  *       "reset_password"={
  *          "method": "POST",
  *          "path"="/users/reset_password",
+ *          "denormalization_context"={"groups"={"user:reset_password"}}
  *       },
  *       "change_password"={
  *          "method"="POST",
@@ -68,7 +69,7 @@ class User implements UserInterface
      * @var string The hashed password
      * @ORM\Column(type="string")
      * @Groups({"user:register", "user:reset_password", "user:change_password"})
-     * @Assert\NotNull(groups={"user:register", "user:reset_password"})
+     * @Assert\NotNull(groups={"user:register"})
      */
     private $password;
 
