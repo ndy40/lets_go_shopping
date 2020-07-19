@@ -7,15 +7,11 @@
  *
  */
 
-namespace App\DataTransformer;
+namespace App\DataTransformers;
 
 
-use App\Entity\User;
-use App\Http\Requests\SignUpRequests;
+use App\Requests\SignUpRequests;
 use App\Services\HydratorService;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class SignUpDataTransformer implements \ApiPlatform\Core\DataTransformer\DataTransformerInterface
 {

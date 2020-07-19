@@ -7,7 +7,7 @@
  *
  */
 
-namespace App\Resolvers;
+namespace App\Providers;
 
 
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;

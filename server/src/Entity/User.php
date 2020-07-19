@@ -10,8 +10,9 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Http\Requests\SignUpRequests;
-use App\Http\Requests\ChangePasswordRequests;
+use App\Requests\SignUpRequests;
+use App\Requests\ChangePasswordRequests;
+use App\Controller\SendResetPasswordController;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -30,6 +31,9 @@ use App\Http\Requests\ChangePasswordRequests;
  *       "reset_password"={
  *          "method": "POST",
  *          "path"="/users/reset_password",
+ *          "controller"=SendResetPasswordController::class,
+ *          "output"=false,
+ *          "input"=SignUpRequests::class,
  *          "denormalization_context"={"groups"={"user:reset_password"}}
  *       },
  *       "change_password"={
@@ -68,7 +72,7 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * @Groups({"user:register", "user:reset_password", "user:change_password"})
+     * @Groups({"user:register", "user:change_password"})
      * @Assert\NotNull(groups={"user:register"})
      */
     private $password;
@@ -88,6 +92,24 @@ class User implements UserInterface
      * @Assert\NotNull(groups={"user:register"})
      */
     private $lastName;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $resetToken;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $verifyToken;
+
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean", nullable=true, options={"default": false})
+     */
+    private $isVerified;
 
     public function getId(): ?int
     {
@@ -189,5 +211,53 @@ class User implements UserInterface
         $this->lastName = $lastName;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getResetToken(): string
+    {
+        return $this->resetToken;
+    }
+
+    /**
+     * @param string $resetToken
+     */
+    public function setResetToken(?string $resetToken): void
+    {
+        $this->resetToken = $resetToken;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVerifyToken(): ?string
+    {
+        return $this->verifyToken;
+    }
+
+    /**
+     * @param string $verifyToken
+     */
+    public function setVerifyToken(?string $verifyToken): void
+    {
+        $this->verifyToken = $verifyToken;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    /**
+     * @param bool $isVerified
+     */
+    public function setIsVerified(bool $isVerified): void
+    {
+        $this->isVerified = $isVerified;
     }
 }

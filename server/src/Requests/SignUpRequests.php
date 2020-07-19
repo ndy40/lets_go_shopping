@@ -7,9 +7,10 @@
  *
  */
 
-namespace App\Http\Requests;
+namespace App\Requests;
 
 
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class SignUpRequests
@@ -18,6 +19,7 @@ class SignUpRequests
      * @var string
      * @Assert\Email()
      * @Assert\NotNull()
+     * @Groups({"user:reset_password"})
      */
     public $email;
 

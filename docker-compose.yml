@@ -31,6 +31,8 @@ services:
       <<: *server-cache-from
     container_name: php
     image: ${PHP_IMAGE:-php:7.4.7-fpm-buster}
+    env_file:
+      - .env.app.secrets
     environment:
       - DATABASE_URL=mysql://shopping_list:shopping_list@db:3306/shopping_list?
     depends_on:

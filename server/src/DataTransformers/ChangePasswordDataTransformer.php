@@ -7,15 +7,14 @@
  *
  */
 
-namespace App\DataTransformer;
+namespace App\DataTransformers;
 
 
 use ApiPlatform\Core\DataTransformer\DataTransformerInterface;
 use ApiPlatform\Core\Validator\Exception\ValidationException;
 use App\Entity\User;
-use App\Http\Requests\ChangePasswordRequests;
-use App\Repository\UserRepository;
-use App\Resolvers\ApiTokenResolver;
+use App\Requests\ChangePasswordRequests;
+use App\Providers\ApiTokenResolver;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -43,7 +42,8 @@ class ChangePasswordDataTransformer implements DataTransformerInterface
     {
         $this->validate($object);
         $user = $this->tokenResolver->getUser();
-        $encodedPassword = $this->encoder->encodePassword($user, $object->password);
+        $encodedPassword = $this->encoder
+            ->encodePassword($user, $object->password);
 
         $user->setPassword($encodedPassword);
 

@@ -7,7 +7,7 @@
  *
  */
 
-namespace App\Http\Requests;
+namespace App\Requests;
 
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -16,8 +16,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class ChangePasswordRequests
  *
  * Chnage user password.
- *
- * @package App\Http\Requests
  */
 class ChangePasswordRequests
 {

@@ -1,0 +1,2 @@
+parameters:
+  app.app_url: http://localhost

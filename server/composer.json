@@ -32,7 +32,9 @@
         "symfony/twig-pack": "*",
         "symfony/validator": "5.1.*",
         "symfony/web-link": "5.1.*",
-        "symfony/yaml": "5.1.*"
+        "symfony/yaml": "5.1.*",
+        "symfony/sendgrid-mailer": "5.1.2",
+        "symfony/event-dispatcher": "5.1.2"
     },
     "require-dev": {
         "symfony/debug-pack": "*",

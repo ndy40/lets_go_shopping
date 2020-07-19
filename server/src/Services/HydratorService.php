@@ -11,6 +11,7 @@ namespace App\Services;
 
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\PropertyInfo\Extractor\SerializerExtractor;
@@ -19,6 +20,14 @@ use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 
 class HydratorService
 {
+    public function hydrateFromRequests(Request $request, object $to, $context = [])
+    {
+        $requestObject = json_decode($request->getContent());
+
+        return $this->hydrate($requestObject, $to, $context);
+
+    }
+
     public function hydrate(object $from, object $to, array $context = [])
     {
         $destinationAttributes = $this->getAttributes($to, $context);

@@ -7,7 +7,7 @@
  *
  */
 
-namespace App\Provider;
+namespace App\Providers;
 
 
 use App\Entity\User;

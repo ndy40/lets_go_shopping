@@ -107,6 +107,9 @@
     "gedmo/doctrine-extensions": {
         "version": "v2.4.41"
     },
+    "laminas/laminas-zendframework-bridge": {
+        "version": "1.0.4"
+    },
     "lcobucci/jwt": {
         "version": "3.3.2"
     },
@@ -464,6 +467,15 @@
     "symfony/security-http": {
         "version": "v5.1.2"
     },
+    "symfony/sendgrid-mailer": {
+        "version": "4.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.4",
+            "ref": "b46e4f8f1adb2864f0aa9c0ff57aea3324a07199"
+        }
+    },
     "symfony/serializer": {
         "version": "v5.1.2"
     },
@@ -562,6 +574,9 @@
     },
     "twig/twig": {
         "version": "v3.0.3"
+    },
+    "webimpress/safe-writer": {
+        "version": "2.0.1"
     },
     "webmozart/assert": {
         "version": "1.9.0"
