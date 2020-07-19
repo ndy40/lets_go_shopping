@@ -1,8 +1,20 @@
 ARG PHP_VERSION=7.4.7
 ARG NGINX_VERSION=1.19
 
-FROM php:${PHP_VERSION}-fpm-buster AS server_php
+#Configure Local Dev TLS
+FROM alpine AS dev-certs
+WORKDIR /certs
+RUN set -ex \
+    && wget -q -O mkcert https://github.com/FiloSottile/mkcert/releases/download/v1.4.1/mkcert-v1.4.1-linux-amd64 \
+    && chmod +x mkcert \
+    && ./mkcert -install \
+    && ./mkcert localhost; \
+    chmod a+r localhost*
 
+VOLUME /certs
+
+
+FROM php:${PHP_VERSION}-fpm-buster AS server_php
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
@@ -67,3 +79,4 @@ COPY ./docker/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
 WORKDIR /var/www/html/public
 
 COPY --from=server_php /var/www/html/public ./
+
