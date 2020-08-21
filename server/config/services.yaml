@@ -46,6 +46,13 @@ services:
     App\Listeners\EventDispatcherKernelEvent:
         tags:
             - { name: kernel.event_listener, event: kernel.request }
+    App\Listeners\DoctrineOwnerFilterKernelEvent:
+#        arguments:
+#            - App\Providers\ApiTokenResolver
+#            - "@doctrine.orm.entity_manager"
+#            - "@doctrine.orm.metadata.annotation_reader"
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }
 
     # Custom Event Listeners
     App\Listeners\UserRegisterEventListener:

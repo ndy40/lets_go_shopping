@@ -10,13 +10,13 @@ security:
             id: App\Providers\UserProvider
     firewalls:
         dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            pattern: ^/(_(profiler|wdt)|css|images|js)/|/api/docs
             security: false
         main:
-            anonymous: true
             lazy: true
             provider: app_user_provider
             stateless: true
+            anonymous: false
             json_login:
                 check_path: /authentication_token
                 success_handler: lexik_jwt_authentication.handler.authentication_success
