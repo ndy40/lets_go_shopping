@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use App\Traits\TimestampableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -110,6 +112,16 @@ class User implements UserInterface
      * @ORM\Column(type="boolean", nullable=true, options={"default": false})
      */
     private $isVerified;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ShoppingItem::class, mappedBy="owner", orphanRemoval=true)
+     */
+    private $shoppingItems;
+
+    public function __construct()
+    {
+        $this->shoppingItems = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -259,5 +271,36 @@ class User implements UserInterface
     public function setIsVerified(bool $isVerified): void
     {
         $this->isVerified = $isVerified;
+    }
+
+    /**
+     * @return Collection|ShoppingItem[]
+     */
+    public function getShoppingItems(): Collection
+    {
+        return $this->shoppingItems;
+    }
+
+    public function addShoppingItem(ShoppingItem $shoppingItem): self
+    {
+        if (!$this->shoppingItems->contains($shoppingItem)) {
+            $this->shoppingItems[] = $shoppingItem;
+            $shoppingItem->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeShoppingItem(ShoppingItem $shoppingItem): self
+    {
+        if ($this->shoppingItems->contains($shoppingItem)) {
+            $this->shoppingItems->removeElement($shoppingItem);
+            // set the owning side to null (unless already changed)
+            if ($shoppingItem->getOwner() === $this) {
+                $shoppingItem->setOwner(null);
+            }
+        }
+
+        return $this;
     }
 }
