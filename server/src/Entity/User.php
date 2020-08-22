@@ -21,7 +21,6 @@ use App\Controller\SendResetPasswordController;
  * @ORM\Table(name="users")
  * @ORM\HasLifecycleCallbacks()
  * @ApiResource(
- *     shortName="users",
  *     normalizationContext={"groups"={"user:read"}},
  *     itemOperations={"get"},
  *     collectionOperations={
@@ -118,9 +117,21 @@ class User implements UserInterface
      */
     private $shoppingItems;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ShoppingList::class, mappedBy="owner", orphanRemoval=true)
+     */
+    private $shoppingLists;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=ShoppingList::class, mappedBy="collaborators")
+     */
+    private $sharedShoppingLists;
+
     public function __construct()
     {
         $this->shoppingItems = new ArrayCollection();
+        $this->shoppingLists = new ArrayCollection();
+        $this->sharedShoppingLists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -234,7 +245,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param string $resetToken
+     * @param ?string $resetToken
      */
     public function setResetToken(?string $resetToken): void
     {
@@ -250,7 +261,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param string $verifyToken
+     * @param ?string $verifyToken
      */
     public function setVerifyToken(?string $verifyToken): void
     {
@@ -299,6 +310,65 @@ class User implements UserInterface
             if ($shoppingItem->getOwner() === $this) {
                 $shoppingItem->setOwner(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ShoppingList[]
+     */
+    public function getShoppingLists(): Collection
+    {
+        return $this->shoppingLists;
+    }
+
+    public function addShoppingList(ShoppingList $shoppingList): self
+    {
+        if (!$this->shoppingLists->contains($shoppingList)) {
+            $this->shoppingLists[] = $shoppingList;
+            $shoppingList->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeShoppingList(ShoppingList $shoppingList): self
+    {
+        if ($this->shoppingLists->contains($shoppingList)) {
+            $this->shoppingLists->removeElement($shoppingList);
+            // set the owning side to null (unless already changed)
+            if ($shoppingList->getOwner() === $this) {
+                $shoppingList->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ShoppingList[]
+     */
+    public function getSharedShoppingLists(): Collection
+    {
+        return $this->sharedShoppingLists;
+    }
+
+    public function addSharedShoppingList(ShoppingList $sharedShoppingList): self
+    {
+        if (!$this->sharedShoppingLists->contains($sharedShoppingList)) {
+            $this->sharedShoppingLists[] = $sharedShoppingList;
+            $sharedShoppingList->addCollaborator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSharedShoppingList(ShoppingList $sharedShoppingList): self
+    {
+        if ($this->sharedShoppingLists->contains($sharedShoppingList)) {
+            $this->sharedShoppingLists->removeElement($sharedShoppingList);
+            $sharedShoppingList->removeCollaborator($this);
         }
 
         return $this;
