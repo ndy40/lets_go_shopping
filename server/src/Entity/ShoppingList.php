@@ -15,11 +15,24 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Controller\Operation\CloneShoppingListsAction;
 
 /**
  * @ApiResource(
  *     normalizationContext={"groups"={"shopping_lists:read"}},
- *     denormalizationContext={"groups"={"shopping_lists:write"}}
+ *     denormalizationContext={"groups"={"shopping_lists:write"}},
+ *     itemOperations={
+ *      "get",
+ *      "patch",
+ *      "delete",
+ *      "put",
+ *      "clone"={
+ *          "method"="GET",
+ *          "path"="/shopping_lists/{id}/clone",
+ *          "controller"=CloneShoppingListsAction::class,
+ *          "input"=false
+ *      }
+ *     }
  * )
  * @ORM\Entity(repositoryClass=ShoppingListRepository::class)
  * @OwnerAware(fieldName="owner_id")
@@ -29,11 +42,20 @@ class ShoppingList
 {
     use TimestampableEntity, TimestampableTrait;
 
+    const STATUS_DRAFT = 'DRAFT';
+
+    const STATUS_TEMPLATE = 'TEMPLATE';
+
+    const STATUS_PUBLISHED = 'PUBLISHED';
+
+    const STATUS_CLOSED = 'CLOSED';
+
+
     const STATUSES = [
-      'DRAFT',
-      'TEMPLATE',
-      'PUBLISHED',
-      'CLOSED'
+        self::STATUS_DRAFT,
+        self::STATUS_PUBLISHED,
+        self::STATUS_TEMPLATE,
+        self::STATUS_CLOSED
     ];
 
     /**
@@ -215,4 +237,25 @@ class ShoppingList
             $this->title = 'Shopping List ' . (Carbon::now())->toRfc7231String();
         }
     }
+
+    /**
+     * @ORM\PrePersist()
+     */
+    public function onStatusPrePersist()
+    {
+        if (is_null($this->status)) {
+            $this->status = self::STATUS_DRAFT;
+        }
+    }
+
+    public function __clone()
+    {
+        $this->id = null;
+        $this->channelId = null;
+        $this->createdAt = null;
+        $this->updatedAt = null;
+        $this->status = null;
+    }
+
+
 }
