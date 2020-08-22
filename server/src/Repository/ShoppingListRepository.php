@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\ShoppingList;
+use App\Traits\BaseRepositoryTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,6 +15,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ShoppingListRepository extends ServiceEntityRepository
 {
+    use BaseRepositoryTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ShoppingList::class);
