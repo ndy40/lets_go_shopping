@@ -143,6 +143,9 @@
             "config/packages/nelmio_cors.yaml"
         ]
     },
+    "nesbot/carbon": {
+        "version": "2.38.0"
+    },
     "nikic/php-parser": {
         "version": "v4.5.0"
     },
@@ -416,6 +419,9 @@
     },
     "symfony/polyfill-php80": {
         "version": "v1.17.1"
+    },
+    "symfony/polyfill-uuid": {
+        "version": "v1.18.1"
     },
     "symfony/process": {
         "version": "v5.1.2"
