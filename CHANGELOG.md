@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0]
+### Added
+- Added new entity ShoppingList with CRUD endpoints
+- Added relationship between ShoppingList and Shopping Item. 
+
 ## [0.1.0] - 2020-08-21
 ### Added
 - Added new Entity ShoppingItem which is a list of items a person usually shops. 
