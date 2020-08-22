@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ShoppingListRepository;
 use App\Traits\TimestampableTrait;
@@ -13,6 +14,7 @@ use App\Extensions\Doctrine\Owner\OwnerAware;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ApiResource(
@@ -39,6 +41,7 @@ class ShoppingList
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"shopping_lists:read"})
+     * @ApiFilter(SearchFilter::class)
      */
     private $id;
 
@@ -46,12 +49,14 @@ class ShoppingList
      * @ORM\Column(type="string", length=255)
      * @Groups({"shopping_lists:read", "shopping_lists:write"})
      * @Assert\Choice(choices=ShoppingList::STATUSES, message="unsupported status - {{value}}. Suppprted status: {{choices}}")
+     * @ApiFilter(SearchFilter::class)
      */
     private $status;
 
     /**
      * @ORM\Column(type="guid", nullable=true)
      * @Groups({"shopping_lists:read"})
+     * @ApiFilter(SearchFilter::class)
      */
     private $channelId;
 
@@ -70,12 +75,14 @@ class ShoppingList
     /**
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="sharedShoppingLists")
      * @Groups({"shopping_lists:read", "shopping_lists:write"})
+     * @ApiFilter(SearchFilter::class)
      */
     private $collaborators;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"shopping_lists:read", "shopping_lists:write"})
+     * @ApiFilter(SearchFilter::class, strategy="partial")
      */
     private $title;
 

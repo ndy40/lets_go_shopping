@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Extensions\Doctrine\Owner\OwnerAware;
 use App\Repository\ShoppingItemRepository;
@@ -9,6 +10,7 @@ use App\Traits\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ApiResource()
@@ -32,6 +34,7 @@ class ShoppingItem
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @ApiFilter(SearchFilter::class, strategy="partial")
      *
      */
     private $name;
@@ -45,6 +48,7 @@ class ShoppingItem
     /**
      * @ORM\Column(type="string", length=255, nullable=false, options={"default": "NOT_PICKED"})
      * @Assert\Choice(choices=ShoppingItem::STATUS, message="Pick a valid status")
+     * @ApiFilter(SearchFilter::class)
      */
     private $status;
 
