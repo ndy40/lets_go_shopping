@@ -37,9 +37,13 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY docker/php/conf.d/server-php.prod.ini $PHP_INI_DIR/conf.d/server.ini
 COPY docker/php/conf.d/www.conf /usr/local/etc/php-fpm.d/www.conf
 
-WORKDIR /var/www/html
-
 ARG APP_ENV=prod
+
+RUN mkdir /symfony && mkdir -p /symfony/var/{cache,log} && mkdir /symfony/vendor; \
+    [ -e "/var/www/html/var" ] || ln -s /symfony/var /var/www/html/var;  \
+    [ -e "/var/www/html/vendor" ] || ln -s /symfony/vendor /var/www/html/vendor;
+
+WORKDIR /var/www/html
 
 COPY composer.json composer.lock symfony.lock ./
 RUN set -eux; \
@@ -54,6 +58,7 @@ RUN composer dump-env prod; \
 # copy only specifically what we need
 COPY bin bin/
 COPY config config/
+COPY docker docker/
 COPY public public/
 COPY src src/
 
