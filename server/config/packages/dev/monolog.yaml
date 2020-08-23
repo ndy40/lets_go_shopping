@@ -1,9 +1,8 @@
 monolog:
     handlers:
         main:
-            type: console
-            level: debug
-            channels: ["!event", "!console"]
+            type: group
+            members: [dockerlog, console]
         # uncomment to get logging in your browser
         # you may have to allow bigger header sizes in your Web server configuration
         #firephp:
@@ -12,6 +11,11 @@ monolog:
         #chromephp:
         #    type: chromephp
         #    level: info
+        dockerlog:
+            type: stream
+            path: "php://stderr"
+            level: error
+            channels: ["!event", "!console", "!doctrine"]
         console:
             type: console
             process_psr_3_messages: false
