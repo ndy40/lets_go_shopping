@@ -6,6 +6,7 @@
 parameters:
     container.dumper.inline_factories: true
     app.email.sender: '%env(resolve:APP_SENDER_EMAIL)%'
+    app.app_url: '%env(resolve: APP_URL)%'
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -47,10 +48,10 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request }
     App\Listeners\DoctrineOwnerFilterKernelEvent:
-#        arguments:
-#            - App\Providers\ApiTokenResolver
-#            - "@doctrine.orm.entity_manager"
-#            - "@doctrine.orm.metadata.annotation_reader"
+        arguments:
+            - '@App\Providers\ApiTokenResolver'
+            - "@doctrine.orm.entity_manager"
+            - "@doctrine.orm.metadata.annotation_reader"
         tags:
             - { name: kernel.event_listener, event: kernel.request }
 
