@@ -15,7 +15,7 @@ monolog:
             type: stream
             path: "php://stderr"
             level: error
-            channels: ["!event", "!console", "!doctrine"]
+            channels: ["!event", "!doctrine"]
         console:
             type: console
             process_psr_3_messages: false

@@ -1,0 +1,30 @@
+framework:
+    workflows:
+        shopping_lists:
+            type: 'state_machine'
+            audit_trail:
+                enabled: true
+            marking_store:
+                type: 'method'
+                property: 'status'
+            supports:
+                - App\Entity\ShoppingList
+            initial_marking: DRAFT
+            places:
+                - DRAFT
+                - TEMPLATE
+                - PUBLISHED
+                - CLOSED
+            transitions:
+                to_publish:
+                    from: DRAFT
+                    to: PUBLISHED
+                to_draft:
+                    from: [PUBLISHED, TEMPLATE, CLOSED]
+                    to: DRAFT
+                to_closed:
+                    from: [PUBLISHED, DRAFT]
+                    to: CLOSED
+                to_template:
+                    from: DRAFT
+                    to: TEMPLATE
