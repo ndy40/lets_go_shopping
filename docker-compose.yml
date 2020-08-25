@@ -28,10 +28,12 @@ services:
       target: server_php
       <<: *server-cache-from
     container_name: php
+    restart: on-failure
     image: ${PHP_IMAGE:-php:7.4.7-fpm-buster}
     env_file:
       - .env.app.secrets
     environment:
+      - APP_URL=host.docker.internal
       - DATABASE_URL=mysql://shopping_list:shopping_list@db:3306/shopping_list?
     depends_on:
       - db
@@ -52,7 +54,7 @@ services:
       - MYSQL_PASSWORD=shopping_list
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
     volumes:
-      - db-data:/var/lib/mysql:rw
+      - db-data:/var/lib/mysql
     ports:
       - "3306:3306"
     networks:

@@ -4,34 +4,54 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Controller\Operation\CloneShoppingListsAction;
+use App\Extensions\Doctrine\Owner\OwnerAware;
 use App\Repository\ShoppingListRepository;
+use App\Responses\TransitionListsResponse;
 use App\Traits\TimestampableTrait;
 use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Extensions\Doctrine\Owner\OwnerAware;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use App\Controller\Operation\CloneShoppingListsAction;
+use App\Controller\Operation\FetchStatusesOperation;
+use App\Controller\Operation\PatchStateOperation;
 
 /**
  * @ApiResource(
  *     normalizationContext={"groups"={"shopping_lists:read"}},
  *     denormalizationContext={"groups"={"shopping_lists:write"}},
  *     itemOperations={
- *      "get",
- *      "patch",
- *      "delete",
- *      "put",
- *      "clone"={
- *          "method"="GET",
- *          "path"="/shopping_lists/{id}/clone",
- *          "controller"=CloneShoppingListsAction::class,
- *          "input"=false
- *      }
+ *          "get",
+ *             "patch"={
+ *               "denormalization_context"={"groups": "shopping_list:patch"}
+ *          },
+ *          "delete",
+ *          "put",
+ *          "clone"={
+ *              "method"="GET",
+ *              "description"="Create a new shopping list from Template",
+ *              "path"="/shopping_lists/{id}/clone",
+ *              "controller"=CloneShoppingListsAction::class,
+ *              "input"=false
+ *          },
+ *          "transition"={
+ *              "method"="PATCH",
+ *              "path"="/shopping_lists/{id}/statuses",
+ *              "controller"=PatchStateOperation::class,
+ *              "denormalization_context"={"groups": "shopping_list:state"}
+ *          },
+ *          "transition_statuses"={
+ *              "method"="GET",
+ *              "path"="/shopping_lists/{id}/statuses",
+ *              "controller"=FetchStatusesOperation::class,
+ *              "input"=false,
+ *              "output"=TransitionListsResponse::class,
+ *              "formats"={"json"}
+ *          }
  *     }
  * )
  * @ORM\Entity(repositoryClass=ShoppingListRepository::class)
@@ -69,7 +89,7 @@ class ShoppingList
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"shopping_lists:read", "shopping_lists:write"})
+     * @Groups({"shopping_lists:read", "shopping_lists:write", "shopping_list:status"})
      * @Assert\Choice(choices=ShoppingList::STATUSES, message="unsupported status - {{value}}. Suppprted status: {{choices}}")
      * @ApiFilter(SearchFilter::class)
      */
@@ -84,7 +104,7 @@ class ShoppingList
 
     /**
      * @ORM\ManyToMany(targetEntity=ShoppingItem::class)
-     * @Groups({"shopping_lists:read", "shopping_lists:write"})
+     * @Groups({"shopping_lists:read", "shopping_lists:write", "shopping_list:patch"})
      */
     private $shoppingItems;
 
@@ -96,14 +116,14 @@ class ShoppingList
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="sharedShoppingLists")
-     * @Groups({"shopping_lists:read", "shopping_lists:write"})
+     * @Groups({"shopping_lists:read", "shopping_lists:write", "shopping_list:patch"})
      * @ApiFilter(SearchFilter::class)
      */
     private $collaborators;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"shopping_lists:read", "shopping_lists:write"})
+     * @Groups({"shopping_lists:read", "shopping_lists:write", "shopping_list:patch"})
      * @ApiFilter(SearchFilter::class, strategy="partial")
      */
     private $title;

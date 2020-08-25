@@ -6,7 +6,7 @@
 parameters:
     container.dumper.inline_factories: true
     app.email.sender: '%env(resolve:APP_SENDER_EMAIL)%'
-    app.app_url: '%env(resolve: APP_URL)%'
+    app.app_url: 'http://localhost'
 services:
     # default configuration for services in *this* file
     _defaults:
