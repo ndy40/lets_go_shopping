@@ -1,5 +1,6 @@
 ARG PHP_VERSION=7.4.7
 ARG NGINX_VERSION=1.19
+ARG COMPOSER_VERSION=1.10.10
 
 #Configure Local Dev TLS
 FROM alpine AS dev-certs
@@ -13,6 +14,16 @@ RUN set -ex \
 
 VOLUME /certs
 
+FROM composer:${COMPOSER_VERSION} as composer_build
+
+COPY composer.json composer.lock symfony.lock .env /composer_build/
+
+WORKDIR /composer_build
+
+RUN set -eux; \
+	composer install --prefer-dist --no-dev --no-scripts --no-progress --no-suggest;
+
+
 
 FROM php:${PHP_VERSION}-fpm-buster AS server_php
 # Install system dependencies
@@ -25,13 +36,9 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip; \
     apt-get clean; \
-    rm -rf /var/lib/apt/lists/*
-
-# Install PHP dependencies
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
-
-# Get latest Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+    rm -rf /var/lib/apt/lists/*; \
+    docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd; \
+    mkdir -p /symfony/var/{cache,log}
 
 #RUN ln -s $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
 COPY docker/php/conf.d/server-php.prod.ini $PHP_INI_DIR/conf.d/server.ini
@@ -39,21 +46,9 @@ COPY docker/php/conf.d/www.conf /usr/local/etc/php-fpm.d/www.conf
 
 ARG APP_ENV=prod
 
-RUN mkdir /symfony && mkdir -p /symfony/var/{cache,log} && mkdir /symfony/vendor; \
-    [ -e "/var/www/html/var" ] || ln -s /symfony/var /var/www/html/var;  \
-    [ -e "/var/www/html/vendor" ] || ln -s /symfony/vendor /var/www/html/vendor;
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
-
-COPY composer.json composer.lock symfony.lock ./
-RUN set -eux; \
-	composer install --prefer-dist --no-dev --no-scripts --no-progress --no-suggest; \
-	composer clear-cache
-
-# do not use .env files in production
-COPY .env ./
-RUN composer dump-env prod; \
-	rm .env
 
 # copy only specifically what we need
 COPY bin bin/
@@ -61,12 +56,18 @@ COPY config config/
 COPY docker docker/
 COPY public public/
 COPY src src/
+COPY --from=composer_build /composer_build/vendor /symfony/vendor/
+COPY --from=composer_build /composer_build/composer.lock /composer_build/composer.json /composer_build/symfony.lock /var/www/html/
+COPY .env /var/www/html/
 
 RUN set -eux; \
-	mkdir -p var/cache var/log; \
+    [ -e "/var/www/html/var" ] || ln -s /symfony/var /var/www/html/var;  \
+    [ -e "/var/www/html/vendor" ] || ln -s /symfony/vendor /var/www/html/vendor; \
+    composer dump-env prod; \
 	composer dump-autoload --classmap-authoritative --no-dev; \
 	composer run-script --no-dev post-install-cmd; \
-	chmod +x bin/console; sync
+	chmod +x bin/console; rm .env; sync
+
 VOLUME /var/www/html
 
 
