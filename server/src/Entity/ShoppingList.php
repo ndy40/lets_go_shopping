@@ -115,13 +115,6 @@ class ShoppingList
     private $owner;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="sharedShoppingLists")
-     * @Groups({"shopping_lists:read", "shopping_lists:write", "shopping_list:patch"})
-     * @ApiFilter(SearchFilter::class)
-     */
-    private $collaborators;
-
-    /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"shopping_lists:read", "shopping_lists:write", "shopping_list:patch"})
      * @ApiFilter(SearchFilter::class, strategy="partial")
@@ -132,7 +125,6 @@ class ShoppingList
     public function __construct()
     {
         $this->shoppingItems = new ArrayCollection();
-        $this->collaborators = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -208,32 +200,6 @@ class ShoppingList
     public function onChannelIdPersist()
     {
         $this->channelId = uuid_create(UUID_TYPE_TIME);
-    }
-
-    /**
-     * @return Collection|User[]
-     */
-    public function getCollaborators(): Collection
-    {
-        return $this->collaborators;
-    }
-
-    public function addCollaborator(User $collaborator): self
-    {
-        if (!$this->collaborators->contains($collaborator)) {
-            $this->collaborators[] = $collaborator;
-        }
-
-        return $this;
-    }
-
-    public function removeCollaborator(User $collaborator): self
-    {
-        if ($this->collaborators->contains($collaborator)) {
-            $this->collaborators->removeElement($collaborator);
-        }
-
-        return $this;
     }
 
     public function getTitle(): ?string

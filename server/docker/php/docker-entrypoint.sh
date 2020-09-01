@@ -17,12 +17,8 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 	chown -R www-data:www-data var
 	chmod -R 755 var
 
-	if [ "$APP_ENV" != 'prod' ]; then
-		composer install --prefer-dist --no-progress --no-suggest --no-interaction
-	fi
-
 	if [ "$APP_ENV" = 'dev']; then
-	    cp docker/php/conf.d/server-php.dev.ini "$PHP_INI_DIR/conf.d/server.ini"
+	    cp docker/php/server-php.dev.ini "$PHP_INI_DIR/conf.d/server.ini"
 	    rm -rf docker/
 	fi
 
