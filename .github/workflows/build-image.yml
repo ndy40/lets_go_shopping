@@ -1,7 +1,8 @@
 name: Build Docker Image
 on:
-  release:
-    types: [published]
+  create:
+    tags:
+      - '*'
 jobs:
   build-image:
     needs: tests
