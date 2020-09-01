@@ -14,12 +14,15 @@ RUN set -ex \
 
 VOLUME /certs
 
-# Building composer
 FROM composer:${COMPOSER_VERSION} as composer_build
+
 COPY composer.json composer.lock symfony.lock .env /composer_build/
+
 WORKDIR /composer_build
+
 RUN set -eux; \
-	composer install --prefer-dist --no-dev --no-scripts --no-progress --no-suggest;
+	composer install --prefer-dist --no-dev --no-scripts --no-progress --no-suggest --optimize-autoloader;
+
 
 
 FROM php:${PHP_VERSION}-fpm-buster AS server_php
@@ -38,10 +41,10 @@ RUN apt-get update && apt-get install -y \
     mkdir -p /symfony/var/{cache,log}
 
 #RUN ln -s $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
-COPY docker/php/server-php.dev.ini $PHP_INI_DIR/conf.d/server.ini
-COPY docker/php/www.conf /usr/local/etc/php-fpm.d/www.conf
+COPY docker/php/prod/server-php.prod.ini $PHP_INI_DIR/conf.d/server.ini
+COPY docker/php/prod/www.conf /usr/local/etc/php-fpm.d/www.conf
 
-ARG APP_ENV=dev
+ARG APP_ENV=prod
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -56,12 +59,15 @@ COPY src src/
 COPY --from=composer_build /composer_build/vendor /symfony/vendor/
 COPY --from=composer_build /composer_build/composer.lock /composer_build/composer.json /composer_build/symfony.lock /var/www/html/
 COPY .env /var/www/html/
+COPY --from=dev-certs /certs/ /var/www/certs/
 
 RUN set -eux; \
     [ -e "/var/www/html/var" ] || ln -s /symfony/var /var/www/html/var;  \
     [ -e "/var/www/html/vendor" ] || ln -s /symfony/vendor /var/www/html/vendor; \
+    composer dump-env prod; \
+	composer dump-autoload --classmap-authoritative --no-dev; \
 	composer run-script --no-dev post-install-cmd; \
-	chmod +x bin/console; sync
+	chmod +x bin/console; rm .env; sync
 
 VOLUME /var/www/html
 
