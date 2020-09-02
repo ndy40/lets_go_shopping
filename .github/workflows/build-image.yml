@@ -11,7 +11,7 @@ jobs:
         with:
           fetch-depth: 1
       - name: Fetching latest tags
-        run: echo ::set-env CURRENT_TAG=$(git describe $(git rev-list --tags --max-count=1))
+        run: echo ::set-env name=CURRENT_TAG::$(echo $GITHUB_REF )
       - name: Publishing PHP Image to Docker Hub
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
@@ -23,7 +23,7 @@ jobs:
           cache: true
           buildoptions: "--target server_php"
           buildargs: APP_ENV=prod
-          context: server
+          context: server/
       - name: Publishing Nginx Image to Docker Hub
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
@@ -35,4 +35,4 @@ jobs:
           cache: true
           buildoptions: "--target server_nginx"
           buildargs: APP_ENV=prod
-          context: server
+          context: server/
