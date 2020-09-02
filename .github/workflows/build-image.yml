@@ -11,7 +11,7 @@ jobs:
         with:
           fetch-depth: 1
       - name: Fetching latest tags
-        run: echo ::set-env name=CURRENT_TAG::$(echo $GITHUB_REF )
+        run: echo ::set-env name=CURRENT_TAG::$(echo $GITHUB_REF | sed 's/.*\///g' )
       - name: Publishing PHP Image to Docker Hub
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
