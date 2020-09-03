@@ -49,6 +49,8 @@ jobs:
           echo ${{ secrets.APP_ENV }} | base64 -d | tee .env > /dev/null
           ls -al
           echo ".env file created"
+      - name: Fetching latest tags
+          run: echo ::set-env name=CURRENT_TAG::$(echo $GITHUB_REF | sed 's/.*\///g' )
       - name: Update docker-composer file
         run: |
           sed "s/CURRENT_TAG/${{ secrets.CURRENT_TAG }}/g" docker-compose.tmpl > docker-compose.prod.yml
