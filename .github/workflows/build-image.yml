@@ -51,9 +51,6 @@ jobs:
           echo ".env file created"
       - name: Fetching latest tags
         run: echo ::set-env name=CURRENT_TAG::$(echo $GITHUB_REF | sed 's/.*\///g' )
-      - name: Update docker-composer file
-        run: |
-          sed "s/CURRENT_TAG/${{ secrets.CURRENT_TAG }}/g" docker-compose.tmpl > docker-compose.prod.yml
       - name: Add Private SSH KEY to SSH Agent
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
@@ -66,6 +63,7 @@ jobs:
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
+          sed "s/CURRENT_TAG/$CURRENT_TAG/g" docker-compose.tmpl > docker-compose.prod.yml
           scp -o StrictHostKeyChecking=no -r ./.env ./docker-compose.prod.yml ${{ secrets.SERVER_USER}}@${{ secrets.SERVER_IP }}:${{secrets.DEPLOY_PATH}}
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER}}@${{ secrets.SERVER_IP }} << 'ENDSSH'
             source .env
