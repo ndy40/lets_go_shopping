@@ -60,16 +60,16 @@ jobs:
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           ssh-add - <<< "${{ secrets.PRIVATE }}"
-        - name: Copy Files to Remote
-          env:
-            SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-          run: |
-            scp -o StrictHostKeyChecking=no -r ./.env docker-compose.prod.yml ${{ secrets.SERVER_USER}}@${{ secrets.SERVER_IP }}:${{secrets.DEPLOY_PATH}}
-            ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER}}@${{ secrets.SERVER_IP }} << 'ENDSSH'
-              source .env
-              cd lsg_app/
-              mv docker-compose.prod.yaml docker-compose.yml
-              docker login docker.pkg.github.com -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
-              docker-compose down --rmi all --remove-orphans
-              docker-compose up -d
-            ENDSSH
+      - name: Copy Files to Remote
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          scp -o StrictHostKeyChecking=no -r ./.env docker-compose.prod.yml ${{ secrets.SERVER_USER}}@${{ secrets.SERVER_IP }}:${{secrets.DEPLOY_PATH}}
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER}}@${{ secrets.SERVER_IP }} << 'ENDSSH'
+            source .env
+            cd lsg_app/
+            mv docker-compose.prod.yaml docker-compose.yml
+            docker login docker.pkg.github.com -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
+            docker-compose down --rmi all --remove-orphans
+            docker-compose up -d
+          ENDSSH
