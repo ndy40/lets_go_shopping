@@ -68,7 +68,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER}}@${{ secrets.SERVER_IP }} << 'ENDSSH'
             source .env
             cd lsg_app/
-            mv docker-compose.prod.yaml docker-compose.yml
+            mv docker-compose.prod.yml docker-compose.yml
             docker login docker.pkg.github.com -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
             docker-compose down --rmi all --remove-orphans
             docker-compose up -d
