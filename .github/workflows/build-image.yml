@@ -64,7 +64,7 @@ jobs:
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
-          scp -o StrictHostKeyChecking=no -r ./.env docker-compose.prod.yml ${{ secrets.SERVER_USER}}@${{ secrets.SERVER_IP }}:${{secrets.DEPLOY_PATH}}
+          scp -o StrictHostKeyChecking=no -r ./.env ./docker-compose.prod.yml ${{ secrets.SERVER_USER}}@${{ secrets.SERVER_IP }}:${{secrets.DEPLOY_PATH}}
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER}}@${{ secrets.SERVER_IP }} << 'ENDSSH'
             source .env
             cd lsg_app/
