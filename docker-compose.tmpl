@@ -8,7 +8,8 @@ services:
     env_file:
       - .env
     networks:
-      - httpd
+      - httpsnet
+      - lgs_net
     labels:
         - "traefik.enable=true"
         - "traefik.http.routers.lsg.rule=Host(`${DOMAIN}`)"
@@ -26,8 +27,8 @@ services:
     env_file:
       - .env
     networks:
-      - httpd
-      - dbnetwork
+      - lgs_net
+      - internal_db
     labels:
         - "traefik.enable=false"
 
@@ -35,6 +36,7 @@ volumes:
   db-data:
   dev-certs:
 networks:
+  lgs_net:
   httpsnet:
     external: true
   internal_db:
