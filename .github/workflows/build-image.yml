@@ -43,7 +43,8 @@ jobs:
     steps:
       - name: Create .env file
         run: |
-          echo ${{ secrets.APP_ENV }} | base64 -d | tee .env
+          echo ${{ secrets.APP_ENV }} | base64 -d | tee .env > /dev/null
+          ls -al
           echo ".env file created"
       - name: Update docker-composer file
         run: |
