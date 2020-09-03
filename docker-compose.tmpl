@@ -3,19 +3,30 @@ version: "3.7"
 services:
   server:
     image: ndy40/production:nginx-CURRENT_TAG
-    ports:
-      - "80:80"
-      - "443:443"
     depends_on:
       - php
     networks:
       - httpd
+    labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.blog.rule=Host(`${DOMAIN}`)"
+        - "traefik.http.routers.blog.middlewares=https-redirect"
+        - "traefik.http.routers.blog-secure.tls=true"
+        - "traefik.http.routers.blog-secure.rule=Host(`${DOMAIN}`)"
+        - "traefik.http.routers.blog-secure.entrypoints=websecure"
+        - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
+        - "traefik.http.middlewares.https-redirect.redirectscheme.permanent=true"
+        - "traefik.http.routers.blog-secure.tls.certresolver=default"
+
   php:
     image: ndy40/production:php-CURRENT_TAG
     restart: on-failure
     networks:
       - httpd
       - dbnetwork
+    labels:
+        - "traefik.enable=false"
+
 volumes:
   db-data:
   dev-certs:
