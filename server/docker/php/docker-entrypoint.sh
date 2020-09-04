@@ -17,10 +17,13 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 	chown -R www-data:www-data var
 	chmod -R 755 var
 
-	if [ "$APP_ENV" = 'dev']; then
+	if [ "$APP_ENV" = 'dev' ]; then
 	    cp docker/php/server-php.dev.ini "$PHP_INI_DIR/conf.d/server.ini"
 	    rm -rf docker/
 	fi
+
+	echo "Generate local .env settings"
+	composer dump-env prod;
 
 	echo "Waiting for db to be ready..."
 	until bin/console doctrine:query:sql "SELECT 1" > /dev/null 2>&1; do
