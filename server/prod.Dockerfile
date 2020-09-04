@@ -66,7 +66,7 @@ RUN set -eux; \
     [ -e "/var/www/html/vendor" ] || ln -s /symfony/vendor /var/www/html/vendor; \
 	composer dump-autoload --classmap-authoritative --no-dev; \
 	composer run-script --no-dev post-install-cmd; \
-	chmod +x bin/console; rm .env; sync
+	chmod +x bin/console; sync
 
 VOLUME /var/www/html
 
