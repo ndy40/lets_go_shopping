@@ -76,7 +76,7 @@ CMD ["php-fpm", "-F"]
 # Configure Nginx
 FROM nginx:${NGINX_VERSION} as server_nginx
 
-COPY ./docker/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
+COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 WORKDIR /var/www/html/public
 
 COPY --from=server_php /var/www/html/public ./

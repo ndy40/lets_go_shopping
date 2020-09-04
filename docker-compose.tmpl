@@ -31,10 +31,6 @@ services:
       - internal_db
     labels:
         - "traefik.enable=false"
-
-volumes:
-  db-data:
-  dev-certs:
 networks:
   lgs_net:
   httpsnet:
