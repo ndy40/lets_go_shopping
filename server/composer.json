@@ -2,7 +2,7 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^7.2.5",
+        "php": "^7.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "api-platform/api-pack": "^1.2",
@@ -37,7 +37,8 @@
         "symfony/validator": "5.1.*",
         "symfony/web-link": "5.1.*",
         "symfony/yaml": "5.1.*",
-        "symfony/workflow": "5.1.*"
+        "symfony/workflow": "5.1.*",
+        "gesdinet/jwt-refresh-token-bundle": "~v0.9.1"
     },
     "require-dev": {
         "symfony/debug-pack": "*",

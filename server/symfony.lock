@@ -107,6 +107,9 @@
     "gedmo/doctrine-extensions": {
         "version": "v2.4.42"
     },
+    "gesdinet/jwt-refresh-token-bundle": {
+        "version": "v0.9.1"
+    },
     "laminas/laminas-code": {
         "version": "3.4.1"
     },
