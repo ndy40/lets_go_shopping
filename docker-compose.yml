@@ -17,7 +17,7 @@ services:
       - "443:443"
     volumes:
       - ./server/public:/var/www/html/public:ro
-      - ./server/docker/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+      - ./server/docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - php
     networks:

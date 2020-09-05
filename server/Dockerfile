@@ -16,10 +16,10 @@ VOLUME /certs
 
 # Building composer
 FROM composer:${COMPOSER_VERSION} as composer_build
-COPY composer.json composer.lock symfony.lock .env /composer_build/
+COPY composer.json symfony.lock .env /composer_build/
 WORKDIR /composer_build
 RUN set -eux; \
-	composer install --prefer-dist --no-dev --no-scripts --no-progress --no-suggest;
+	composer install --prefer-dist --no-scripts --no-progress --no-suggest;
 
 
 FROM php:${PHP_VERSION}-fpm-buster AS server_php
@@ -60,7 +60,8 @@ COPY .env /var/www/html/
 RUN set -eux; \
     [ -e "/var/www/html/var" ] || ln -s /symfony/var /var/www/html/var;  \
     [ -e "/var/www/html/vendor" ] || ln -s /symfony/vendor /var/www/html/vendor; \
-	composer run-script --no-dev post-install-cmd; \
+    composer dump-autoload --classmap-authoritative; \
+	composer run-script post-install-cmd; \
 	chmod +x bin/console; sync
 
 VOLUME /var/www/html
