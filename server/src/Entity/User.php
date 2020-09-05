@@ -122,11 +122,6 @@ class User implements UserInterface
      */
     private $shoppingLists;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=ShoppingList::class, mappedBy="collaborators")
-     */
-    private $sharedShoppingLists;
-
     public function __construct()
     {
         $this->shoppingItems = new ArrayCollection();
@@ -341,34 +336,6 @@ class User implements UserInterface
             if ($shoppingList->getOwner() === $this) {
                 $shoppingList->setOwner(null);
             }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|ShoppingList[]
-     */
-    public function getSharedShoppingLists(): Collection
-    {
-        return $this->sharedShoppingLists;
-    }
-
-    public function addSharedShoppingList(ShoppingList $sharedShoppingList): self
-    {
-        if (!$this->sharedShoppingLists->contains($sharedShoppingList)) {
-            $this->sharedShoppingLists[] = $sharedShoppingList;
-            $sharedShoppingList->addCollaborator($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSharedShoppingList(ShoppingList $sharedShoppingList): self
-    {
-        if ($this->sharedShoppingLists->contains($sharedShoppingList)) {
-            $this->sharedShoppingLists->removeElement($sharedShoppingList);
-            $sharedShoppingList->removeCollaborator($this);
         }
 
         return $this;

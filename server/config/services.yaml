@@ -59,3 +59,10 @@ services:
     App\Listeners\UserRegisterEventListener:
         tags:
             - { name: kernel.event_listener , event: user.register, method: onUserRegisterEvent }
+
+    # Services and Decorators
+    App\Decorators\SwaggerDecorator:
+        decorates: 'api_platform.swagger.normalizer.documentation'
+        arguments:
+            - '@App\Decorators\SwaggerDecorator.inner'
+        autoconfigure: false

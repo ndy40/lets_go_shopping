@@ -5,6 +5,10 @@ index:
       path: /api/docs
       permanent: true
 
+gesdinet_jwt_refresh_token:
+  path:       /refresh_token
+  controller: gesdinet.jwtrefreshtoken::refresh
+
 authentication_token:
   path: /authentication_token
   methods: ['POST']
