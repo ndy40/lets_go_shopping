@@ -16,7 +16,7 @@ VOLUME /certs
 
 FROM composer:${COMPOSER_VERSION} as composer_build
 
-COPY composer.json composer.lock symfony.lock .env /composer_build/
+COPY composer.json symfony.lock .env /composer_build/
 
 WORKDIR /composer_build
 
