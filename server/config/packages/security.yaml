@@ -10,7 +10,7 @@ security:
             id: App\Providers\UserProvider
     firewalls:
         dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/|/api/docs
+            pattern: ^/(_(profiler|wdt)|css|images|js)/|/api/docs|\/$
             security: false
         user_register:
             pattern: ^/api/users/register
