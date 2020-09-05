@@ -1,6 +1,9 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+index:
+    path: /
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController
+    defaults:
+      path: /api/docs
+      permanent: true
 
 authentication_token:
   path: /authentication_token
