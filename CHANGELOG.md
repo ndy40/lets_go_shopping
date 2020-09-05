@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.8.0] 2020-09-05
+- Added Swagger Docs documentation decorator for JWT Authentication endpoint.
+## [0.7.0] 2020-09-04
+- Added Github Actions
 ## [0.6.4]
 - removing unsed `Http\Requests` folder path. 
 ## [0.6.3]
