@@ -57,6 +57,7 @@ COPY docker docker/
 COPY public public/
 COPY migrations migrations/
 COPY translations tranlations/
+COPY templates templates/
 COPY src src/
 COPY --from=composer_build /composer_build/vendor /symfony/vendor/
 COPY --from=composer_build /composer_build/composer.lock /composer_build/composer.json /composer_build/symfony.lock /var/www/html/
