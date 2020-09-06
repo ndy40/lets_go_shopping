@@ -266,7 +266,7 @@ class User implements UserInterface
     /**
      * @return bool
      */
-    public function isVerified(): bool
+    public function isVerified(): ?bool
     {
         return $this->isVerified;
     }
@@ -274,7 +274,7 @@ class User implements UserInterface
     /**
      * @param bool $isVerified
      */
-    public function setIsVerified(bool $isVerified): void
+    public function setIsVerified(?bool $isVerified): void
     {
         $this->isVerified = $isVerified;
     }
