@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.9.0] 2020-09-06
+- Added verified email checks during authentication (Token generation)
 ## [0.8.2] 2020-09-05
 - Updated docker files to pick up templates
 ## [0.8.0] 2020-09-05
