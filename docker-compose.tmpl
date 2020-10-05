@@ -4,7 +4,7 @@ services:
   server:
     image: ndy40/production:nginx-CURRENT_TAG
     depends_on:
-      - php
+      - api
     env_file:
       - .env
     networks:
@@ -21,7 +21,7 @@ services:
         - "traefik.http.middlewares.https-redirect.redirectscheme.permanent=true"
         - "traefik.http.routers.lsg-secure.tls.certresolver=default"
 
-  php:
+  api:
     image: ndy40/production:php-CURRENT_TAG
     restart: on-failure
     env_file:
