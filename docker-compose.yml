@@ -10,6 +10,7 @@ services:
     build:
       context: ./server
       target: server_nginx
+      dockerfile: ./prod.Dockerfile
       <<: *server-cache-from
     image: ${NGINX_IMAGE:-nginx-1.19}
     ports:
@@ -19,15 +20,16 @@ services:
       - ./server/public:/var/www/html/public:ro
       - ./server/docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-      - php
+      - api
     networks:
       - httpd
-  php:
+  api:
     build:
       context: ./server
       target: server_php
+      dockerfile: ./prod.Dockerfile
       <<: *server-cache-from
-    container_name: lgs_php
+    container_name: api
     restart: on-failure
     image: ${PHP_IMAGE:-php:7.4.7-fpm-buster}
     depends_on:
