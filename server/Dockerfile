@@ -16,7 +16,7 @@ VOLUME /certs
 
 # Building composer
 FROM composer:${COMPOSER_VERSION} as composer_build
-COPY composer.json symfony.lock .env /composer_build/
+COPY composer.json symfony.lock /composer_build/
 WORKDIR /composer_build
 RUN set -eux; \
 	composer install --prefer-dist --no-scripts --no-progress --no-suggest;
@@ -58,17 +58,17 @@ COPY templates templates/
 COPY src src/
 COPY --from=composer_build /composer_build/vendor /symfony/vendor/
 COPY --from=composer_build /composer_build/composer.lock /composer_build/composer.json /composer_build/symfony.lock /var/www/html/
-COPY .env /var/www/html/
+COPY .env-example /var/www/html/.env
 
 RUN set -eux; \
     [ -e "/var/www/html/var" ] || ln -s /symfony/var /var/www/html/var;  \
     [ -e "/var/www/html/vendor" ] || ln -s /symfony/vendor /var/www/html/vendor; \
     composer dump-autoload --classmap-authoritative; \
-	composer run-script post-install-cmd; \
+    composer dump-env prod; \
+    rm .env; \
 	chmod +x bin/console; sync
 
 VOLUME /var/www/html
-
 
 COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint

@@ -61,14 +61,14 @@ COPY templates templates/
 COPY src src/
 COPY --from=composer_build /composer_build/vendor /symfony/vendor/
 COPY --from=composer_build /composer_build/composer.lock /composer_build/composer.json /composer_build/symfony.lock /var/www/html/
-COPY .env /var/www/html/
+COPY .env-example /var/www/html/.env
 COPY --from=dev-certs /certs/ /var/www/certs/
 
 RUN set -eux; \
     [ -e "/var/www/html/var" ] || ln -s /symfony/var /var/www/html/var;  \
     [ -e "/var/www/html/vendor" ] || ln -s /symfony/vendor /var/www/html/vendor; \
+    composer dump-env prod; \
 	composer dump-autoload --classmap-authoritative --no-dev; \
-	composer run-script --no-dev post-install-cmd; \
 	chmod +x bin/console; sync
 
 VOLUME /var/www/html

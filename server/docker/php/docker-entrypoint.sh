@@ -17,6 +17,8 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 	chown -R www-data:www-data var
 	chmod -R 755 var
 
+	composer run-script post-install-cmd
+
 	if [ "$APP_ENV" = 'dev' ]; then
 	    cp docker/php/server-php.dev.ini "$PHP_INI_DIR/conf.d/server.ini"
 	    rm -rf docker/
