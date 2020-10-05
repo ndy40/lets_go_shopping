@@ -28,7 +28,7 @@ class VerifyAccountController extends \Symfony\Bundle\FrameworkBundle\Controller
     /**
      * @param Request $request
      * @param $token
-     * @Route("/user/verify/{token}", name="user_verify", methods={"GET"})
+     * @Route("/web/verify/{token}", name="user_verify", methods={"GET"})
      */
     public function __invoke(Request $request, $token)
     {

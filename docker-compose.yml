@@ -30,9 +30,6 @@ services:
     container_name: php
     restart: on-failure
     image: ${PHP_IMAGE:-php:7.4.7-fpm-buster}
-    environment:
-      - APP_URL=host.docker.internal
-      - DATABASE_URL=mysql://shopping_list:shopping_list@db:3306/shopping_list?
     depends_on:
       - db
       - dev-tls
