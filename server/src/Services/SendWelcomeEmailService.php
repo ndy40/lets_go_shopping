@@ -85,6 +85,6 @@ class SendWelcomeEmailService
     private function getVerifyLink($user)
     {
 //        $request = $this->requestStack->getCurrentRequest();
-        return  $this->appUrl . '/user/verify/' . $user->getVerifyToken();
+        return  $this->appUrl . '/web/verify/' . $user->getVerifyToken();
     }
 }

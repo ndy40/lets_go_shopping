@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -60,8 +61,6 @@ use App\Controller\Operation\PatchStateOperation;
  */
 class ShoppingList
 {
-    use TimestampableEntity, TimestampableTrait;
-
     const STATUS_DRAFT = 'DRAFT';
 
     const STATUS_TEMPLATE = 'TEMPLATE';
@@ -85,7 +84,7 @@ class ShoppingList
      * @Groups({"shopping_lists:read"})
      * @ApiFilter(SearchFilter::class)
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -93,33 +92,49 @@ class ShoppingList
      * @Assert\Choice(choices=ShoppingList::STATUSES, message="unsupported status - {{value}}. Suppprted status: {{choices}}")
      * @ApiFilter(SearchFilter::class)
      */
-    private $status;
+    private ?string $status;
 
     /**
      * @ORM\Column(type="guid", nullable=true)
      * @Groups({"shopping_lists:read"})
      * @ApiFilter(SearchFilter::class)
      */
-    private $channelId;
+    private ?string $channelId;
 
     /**
      * @ORM\ManyToMany(targetEntity=ShoppingItem::class)
      * @Groups({"shopping_lists:read", "shopping_lists:write", "shopping_list:patch"})
      */
-    private $shoppingItems;
+    private ?Collection $shoppingItems;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="shoppingLists")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $owner;
+    private ?User $owner;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"shopping_lists:read", "shopping_lists:write", "shopping_list:patch"})
      * @ApiFilter(SearchFilter::class, strategy="partial")
      */
-    private $title;
+    private ?string $title;
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     * @Groups({"shopping_lists:read"})
+     */
+    protected \DateTime $createdAt;
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     * @Groups({"shopping_lists:read"})
+     */
+    protected \DateTime $updatedAt;
 
 
     public function __construct()
@@ -241,6 +256,52 @@ class ShoppingList
         $this->createdAt = null;
         $this->updatedAt = null;
         $this->status = null;
+    }
+
+    /**
+     * Sets createdAt.
+     *
+     * @param  \DateTime $createdAt
+     * @return $this
+     */
+    public function setCreatedAt(\DateTime $createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Returns createdAt.
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Sets updatedAt.
+     *
+     * @param  \DateTime $updatedAt
+     * @return $this
+     */
+    public function setUpdatedAt(\DateTime $updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Returns updatedAt.
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 
 
