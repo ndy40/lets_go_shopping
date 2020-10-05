@@ -17,6 +17,10 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 	chown -R www-data:www-data var
 	chmod -R 755 var
 
+    if [ "$APP_ENV" = 'prod' ]; then
+        composer dump-env prod
+    fi
+    
 	composer run-script post-install-cmd
 
 	if [ "$APP_ENV" = 'dev' ]; then
