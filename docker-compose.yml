@@ -27,7 +27,7 @@ services:
       context: ./server
       target: server_php
       <<: *server-cache-from
-    container_name: php
+    container_name: lgs_php
     restart: on-failure
     image: ${PHP_IMAGE:-php:7.4.7-fpm-buster}
     depends_on:
