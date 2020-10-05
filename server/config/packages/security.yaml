@@ -12,6 +12,10 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/|/api/docs|\/$
             security: false
+        public:
+            pattern: ^/web/.+
+            stateless: true
+            anonymous: true
         user_register:
             pattern: ^/api/users/register
             stateless: true
@@ -39,6 +43,7 @@ security:
             pattern: ^/refresh_token
             stateless: true
             anonymous: true
+
 
 
 
