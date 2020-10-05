@@ -67,7 +67,6 @@ COPY --from=dev-certs /certs/ /var/www/certs/
 RUN set -eux; \
     [ -e "/var/www/html/var" ] || ln -s /symfony/var /var/www/html/var;  \
     [ -e "/var/www/html/vendor" ] || ln -s /symfony/vendor /var/www/html/vendor; \
-    composer dump-env prod; \
 	composer dump-autoload --classmap-authoritative --no-dev; \
 	chmod +x bin/console; sync
 
