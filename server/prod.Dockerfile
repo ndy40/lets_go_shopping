@@ -11,37 +11,30 @@ RUN set -ex \
     && ./mkcert -install \
     && ./mkcert localhost; \
     chmod a+r localhost*
-
 VOLUME /certs
 
+#Composer build
 FROM composer:${COMPOSER_VERSION} as composer_build
-
 COPY composer.json symfony.lock /composer_build/
-
 WORKDIR /composer_build
-
 RUN set -eux; \
 	composer install --prefer-dist --no-dev --no-scripts --no-progress --no-suggest --optimize-autoloader;
 
 
-
+#PHP Build
 FROM php:${PHP_VERSION}-fpm-buster AS server_php
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git \
-    curl \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
-    zip \
-    unzip; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/*; \
     docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd; \
     mkdir -p /symfony/var/{cache,log}
 
 #RUN ln -s $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
-COPY docker/php/prod/server-php.prod.ini $PHP_INI_DIR/conf.d/server.ini
+COPY docker/php/prod/php.prod.ini $PHP_INI_DIR/conf.d/server.ini
 COPY docker/php/prod/www.conf /usr/local/etc/php-fpm.d/www.conf
 
 ARG APP_ENV=prod
@@ -69,9 +62,6 @@ RUN set -eux; \
     [ -e "/var/www/html/vendor" ] || ln -s /symfony/vendor /var/www/html/vendor; \
 	composer dump-autoload --classmap-authoritative --no-dev; \
 	chmod +x bin/console; sync
-
-VOLUME /var/www/html
-
 
 COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint

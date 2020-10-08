@@ -12,13 +12,17 @@ jobs:
           fetch-depth: 1
       - name: Fetching latest tags
         run: echo ::set-env name=CURRENT_TAG::$(echo $GITHUB_REF | sed 's/.*\///g' )
+      - name: Create .env file
+        run: |
+          echo ${{ secrets.APP_ENV }} | base64 -d | tee .env > /dev/null
+          ls -al
+          echo ".env file created"
       - name: Publishing PHP Image to Docker Hub
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
           name: ndy40/production
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
-          dockerfile: server/prod.Dockerfile
           tags: php-${{ env.CURRENT_TAG }}
           cache: true
           buildoptions: "--target server_php"
@@ -30,7 +34,6 @@ jobs:
           name: ndy40/production
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
-          dockerfile: server/prod.Dockerfile
           tags: nginx-${{ env.CURRENT_TAG }}
           cache: true
           buildoptions: "--target server_nginx"
