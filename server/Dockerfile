@@ -11,7 +11,6 @@ RUN set -ex \
     && ./mkcert -install \
     && ./mkcert localhost; \
     chmod a+r localhost*
-
 VOLUME /certs
 
 # Building composer
@@ -19,53 +18,51 @@ FROM composer:${COMPOSER_VERSION} as composer_build
 COPY composer.json symfony.lock /composer_build/
 WORKDIR /composer_build
 RUN set -eux; \
-	composer install --prefer-dist --no-scripts --no-progress --no-suggest;
+	composer install --prefer-dist --no-dev --no-scripts --no-progress --no-suggest;
 
 
 FROM php:${PHP_VERSION}-fpm-buster AS server_php
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git \
-    curl \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
-    zip \
-    unzip; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/*; \
     docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd; \
     mkdir -p /symfony/var/{cache,log}
 
-#RUN ln -s $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
-COPY docker/php/server-php.dev.ini $PHP_INI_DIR/conf.d/server.ini
-COPY docker/php/www.conf /usr/local/etc/php-fpm.d/www.conf
+# build for production
+ARG APP_ENV=prod
 
-ARG APP_ENV=dev
-
+COPY docker/php/$APP_ENV/php.$APP_ENV.ini $PHP_INI_DIR/conf.d/server.ini
+COPY docker/php/$APP_ENV/www.conf /usr/local/etc/php-fpm.d/www.conf
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+RUN composer global require "symfony/flex" --prefer-dist --no-progress --no-suggest --classmap-authoritative; \
+	composer clear-cache
+ENV PATH="${PATH}:/root/.composer/vendor/bin"
 
 WORKDIR /var/www/html
 
 # copy only specifically what we need
 COPY bin bin/
 COPY config config/
-COPY docker docker/
 COPY public public/
 COPY migrations migrations/
 COPY translations tranlations/
 COPY templates templates/
+COPY translations translations/
 COPY src src/
-COPY --from=composer_build /composer_build/vendor /symfony/vendor/
+COPY .env .env
+COPY --from=composer_build /composer_build/vendor /var/www/html/vendor/
 COPY --from=composer_build /composer_build/composer.lock /composer_build/composer.json /composer_build/symfony.lock /var/www/html/
+COPY --from=dev-certs /certs /var/www/
 COPY .env-example /var/www/html/.env
 
 RUN set -eux; \
-    [ -e "/var/www/html/var" ] || ln -s /symfony/var /var/www/html/var;  \
-    [ -e "/var/www/html/vendor" ] || ln -s /symfony/vendor /var/www/html/vendor; \
-    composer dump-autoload --classmap-authoritative; \
-    composer dump-env prod; \
-    rm .env; \
+    composer dump-autoload --classmap-authoritative --no-dev; \
+    composer run-script --no-dev post-install-cmd; \
 	chmod +x bin/console; sync
 
 VOLUME /var/www/html
@@ -79,7 +76,6 @@ CMD ["php-fpm", "-F"]
 
 # Configure Nginx
 FROM nginx:${NGINX_VERSION} as server_nginx
-
 COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 WORKDIR /var/www/html/public
 

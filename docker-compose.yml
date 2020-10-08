@@ -31,7 +31,8 @@ services:
       <<: *server-cache-from
     container_name: api
     restart: on-failure
-    image: ${PHP_IMAGE:-php:7.4.7-fpm-buster}
+    env_file:
+      - .env
     depends_on:
       - db
       - dev-tls
