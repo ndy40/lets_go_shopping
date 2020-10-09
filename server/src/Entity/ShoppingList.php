@@ -61,6 +61,8 @@ use App\Controller\Operation\PatchStateOperation;
  */
 class ShoppingList
 {
+    use TimestampableTrait;
+
     const STATUS_DRAFT = 'DRAFT';
 
     const STATUS_TEMPLATE = 'TEMPLATE';

@@ -76,7 +76,10 @@ CMD ["php-fpm", "-F"]
 
 # Configure Nginx
 FROM nginx:${NGINX_VERSION} as server_nginx
-COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+
+ARG APP_ENV=dev
+
+COPY docker/nginx/$APP_ENV.conf /etc/nginx/conf.d/default.conf
 WORKDIR /var/www/html/public
 
 COPY --from=server_php /var/www/html/public ./
