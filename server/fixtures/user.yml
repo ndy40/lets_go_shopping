@@ -3,7 +3,7 @@ App\Entity\User:
     email: "testemail@gmail.com"
     firstName: <firstName()>
     lastName: <lastName()>
-    password: "lsg_password_1"
+    password: "password1234"
     isVerified: true
   user_2:
     email: "testemail2@gmail.com"

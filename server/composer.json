@@ -41,10 +41,13 @@
         "gesdinet/jwt-refresh-token-bundle": "~v0.9.1"
     },
     "require-dev": {
+        "dama/doctrine-test-bundle": "^6.3",
         "hautelook/alice-bundle": "^2.7.1",
+        "justinrainbow/json-schema": "5.2.10",
         "nelmio/alice": "^3.7",
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "^1.0",
+        "symfony/phpunit-bridge": "5.1.*",
         "symfony/profiler-pack": "*",
         "symfony/test-pack": "*"
     },

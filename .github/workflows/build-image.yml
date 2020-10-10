@@ -4,6 +4,19 @@ on:
     tags:
       - '*'
 jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+      - name: Composer dependencies
+          run: composer install --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
+      - name: Running tests
+        env:
+          APP_ENV: test
+          APP_DEBUG: true
+        run: ./bin/run_tests.sh
   build-image:
     runs-on: ubuntu-latest
     steps:

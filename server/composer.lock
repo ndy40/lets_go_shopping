@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7269e56c5b36a5a2f9877859b4ee5c5c",
+    "content-hash": "75f2543b71f54bdc764a14cae67c9365",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -7442,6 +7442,63 @@
     ],
     "packages-dev": [
         {
+            "name": "dama/doctrine-test-bundle",
+            "version": "v6.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dmaicher/doctrine-test-bundle.git",
+                "reference": "a364cfee35acb7d37698c4749f7dd34d04646535"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dmaicher/doctrine-test-bundle/zipball/a364cfee35acb7d37698c4749f7dd34d04646535",
+                "reference": "a364cfee35acb7d37698c4749f7dd34d04646535",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "^2.9,>=2.9.3",
+                "doctrine/doctrine-bundle": "^1.11 || ^2.0",
+                "php": "^7.1",
+                "symfony/framework-bundle": "^3.4 || ^4.3 || ^5.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^0.12",
+                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0",
+                "symfony/phpunit-bridge": "^4.3 || ^5.0",
+                "symfony/yaml": "^3.4 || ^4.3 || ^5.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "7.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "DAMA\\DoctrineTestBundle\\": "src/DAMA/DoctrineTestBundle"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David Maicher",
+                    "email": "mail@dmaicher.de"
+                }
+            ],
+            "description": "Symfony bundle to isolate doctrine database tests and improve test performance",
+            "keywords": [
+                "doctrine",
+                "isolation",
+                "performance",
+                "symfony",
+                "tests"
+            ],
+            "time": "2020-09-04T05:50:21+00:00"
+        },
+        {
             "name": "doctrine/data-fixtures",
             "version": "1.4.4",
             "source": {
@@ -7621,6 +7678,72 @@
                 "symfony"
             ],
             "time": "2020-09-24T20:52:16+00:00"
+        },
+        {
+            "name": "justinrainbow/json-schema",
+            "version": "5.2.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/justinrainbow/json-schema.git",
+                "reference": "2ba9c8c862ecd5510ed16c6340aa9f6eadb4f31b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/2ba9c8c862ecd5510ed16c6340aa9f6eadb4f31b",
+                "reference": "2ba9c8c862ecd5510ed16c6340aa9f6eadb4f31b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~2.2.20||~2.15.1",
+                "json-schema/json-schema-test-suite": "1.2.0",
+                "phpunit/phpunit": "^4.8.35"
+            },
+            "bin": [
+                "bin/validate-json"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "JsonSchema\\": "src/JsonSchema/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bruno Prieto Reis",
+                    "email": "bruno.p.reis@gmail.com"
+                },
+                {
+                    "name": "Justin Rainbow",
+                    "email": "justin.rainbow@gmail.com"
+                },
+                {
+                    "name": "Igor Wiedler",
+                    "email": "igor@wiedler.ch"
+                },
+                {
+                    "name": "Robert Schönthal",
+                    "email": "seroscho@googlemail.com"
+                }
+            ],
+            "description": "A library to validate a json schema.",
+            "homepage": "https://github.com/justinrainbow/json-schema",
+            "keywords": [
+                "json",
+                "schema"
+            ],
+            "time": "2020-05-27T16:41:55+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -8661,5 +8784,6 @@
         "ext-ctype": "*",
         "ext-iconv": "*"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }
