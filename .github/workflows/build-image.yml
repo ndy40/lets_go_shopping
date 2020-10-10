@@ -10,11 +10,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - name: Running tests
+      - name: Setting environment variable
         env:
           APP_ENV: test
           APP_DEBUG: true
-        run: ls -al && ./bin/run_tests.sh
+        run: ./bin/run_tests.sh
   build-image:
     name: Building docker image
     runs-on: ubuntu-latest
