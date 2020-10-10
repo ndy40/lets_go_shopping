@@ -11,10 +11,10 @@ jobs:
         with:
           fetch-depth: 1
       - name: Fetching latest tags
-        run: echo ::set-env name=CURRENT_TAG::$(echo $GITHUB_REF | sed 's/.*\///g' )
+        run: echo "name=$(echo $GITHUB_REF | sed 's/.*\///g' )" >> $GITHUB_ENV
       - name: Create .env file
         run: |
-          echo ${{ secrets.APP_ENV }} | base64 -d | tee .env > /dev/null
+          echo ${{ secrets.APP_ENV }} | base64 -d | tee .env
           ls -al
           echo ".env file created"
       - name: Publishing PHP Image to Docker Hub
@@ -53,7 +53,7 @@ jobs:
           ls -al
           echo ".env file created"
       - name: Fetching latest tags
-        run: echo ::set-env name=CURRENT_TAG::$(echo $GITHUB_REF | sed 's/.*\///g' )
+        run: echo "name=$(echo $GITHUB_REF | sed 's/.*\///g' )" >> $GITHUB_ENV
       - name: Add Private SSH KEY to SSH Agent
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
