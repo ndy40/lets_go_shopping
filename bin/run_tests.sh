@@ -27,6 +27,9 @@ composer --working-dir="$ROOT_DIR/server" install --no-ansi -n --profile --no-sc
 echo "Switching to project directory"
 cd $ROOT_DIR/server
 
+echo "Running migrations and fixtures"
+bin/console d:m:m -n --env=test
+
 echo "Running Tests"
 bin/phpunit -c phpunit.xml
 
