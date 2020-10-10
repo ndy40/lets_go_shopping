@@ -24,6 +24,8 @@ services:
   api:
     image: ndy40/production:php-CURRENT_TAG
     restart: on-failure
+    env_file:
+      - .env
     networks:
       - lgs_net
       - internal_db
