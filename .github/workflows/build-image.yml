@@ -43,7 +43,9 @@ jobs:
         with:
           fetch-depth: 1
       - name: Create .env file
-        run: echo ${{ secrets.APP_ENV }} | base64 -d | tee .env >> $GITHUB_PATH
+        env:
+          env_secret: ${{ secrets.APP_ENV }}
+        run: ./.github/scripts/encrypt_env.sh
       - name: Fetching latest tags
         run: echo "name=$(echo $GITHUB_REF | sed 's/.*\///g' )" >> $GITHUB_ENV
       - name: Add Private SSH KEY to SSH Agent
