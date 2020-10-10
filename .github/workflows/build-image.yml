@@ -44,7 +44,7 @@ jobs:
           fetch-depth: 1
       - name: Create .env file
         run: |
-          echo ${{ secrets.APP_ENV }} | base64 -d | tee .env > /dev/null
+          echo ${{ secrets.APP_ENV }} | base64 -d > .env
           ls -al
           echo ".env file created"
       - name: Fetching latest tags
