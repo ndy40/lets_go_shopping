@@ -31,6 +31,7 @@ use App\Controller\Operation\PatchStateOperation;
  *               "denormalization_context"={"groups": "shopping_list:patch"}
  *          },
  *          "delete",
+ *          "patch",
  *          "put",
  *          "clone"={
  *              "method"="GET",
@@ -93,6 +94,7 @@ class ShoppingList
      * @Groups({"shopping_lists:read", "shopping_lists:write", "shopping_list:status"})
      * @Assert\Choice(choices=ShoppingList::STATUSES, message="unsupported status - {{value}}. Suppprted status: {{choices}}")
      * @ApiFilter(SearchFilter::class)
+     * @Assert\NotBlank
      */
     private ?string $status;
 
@@ -119,6 +121,8 @@ class ShoppingList
      * @ORM\Column(type="string", length=255)
      * @Groups({"shopping_lists:read", "shopping_lists:write", "shopping_list:patch"})
      * @ApiFilter(SearchFilter::class, strategy="partial")
+     * @Assert\NotBlank
+     * @Assert\Type(type="string")
      */
     private ?string $title;
 
@@ -251,22 +255,13 @@ class ShoppingList
         }
     }
 
-    public function __clone()
-    {
-        $this->id = null;
-        $this->channelId = null;
-        $this->createdAt = null;
-        $this->updatedAt = null;
-        $this->status = null;
-    }
-
     /**
      * Sets createdAt.
      *
-     * @param  \DateTime $createdAt
+     * @param  ?\DateTime $createdAt
      * @return $this
      */
-    public function setCreatedAt(\DateTime $createdAt)
+    public function setCreatedAt(?\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -286,10 +281,10 @@ class ShoppingList
     /**
      * Sets updatedAt.
      *
-     * @param  \DateTime $updatedAt
+     * @param  ?\DateTime $updatedAt
      * @return $this
      */
-    public function setUpdatedAt(\DateTime $updatedAt)
+    public function setUpdatedAt(?\DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
 

@@ -9,11 +9,15 @@ use App\Repository\ShoppingItemRepository;
 use App\Traits\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     denormalizationContext={"groups"={"shopping_item:write"}},
+ *     normalizationContext={"groups"={"shopping_item:read"}}
+ * )
  * @ORM\Entity(repositoryClass=ShoppingItemRepository::class)
  * @ORM\HasLifecycleCallbacks()
  * @OwnerAware(fieldName="owner_id")
@@ -28,35 +32,39 @@ class ShoppingItem
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"shopping_item:read"})
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @ApiFilter(SearchFilter::class, strategy="partial")
-     *
+     * @Groups({"shopping_item:read", "shopping_item:write"})
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\Column(type="integer", nullable=false, options={"default": 1})
      * @Assert\Positive()
+     * @Groups({"shopping_item:read", "shopping_item:write"})
      */
-    private $quantity;
+    private ?int $quantity;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false, options={"default": "NOT_PICKED"})
      * @Assert\Choice(choices=ShoppingItem::STATUS, message="Pick a valid status")
      * @ApiFilter(SearchFilter::class)
+     * @Groups({"shopping_item:read", "shopping_item:write"})
+     * @Assert\NotBlank
      */
-    private $status;
+    private ?string $status;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="shoppingItems")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $owner;
+    private ?User $owner;
 
     public function getId(): ?int
     {
@@ -68,7 +76,7 @@ class ShoppingItem
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
@@ -80,7 +88,7 @@ class ShoppingItem
         return $this->status;
     }
 
-    public function setStatus(string $status): self
+    public function setStatus(?string $status): self
     {
         $this->status = $status;
 

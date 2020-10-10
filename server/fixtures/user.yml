@@ -1,0 +1,45 @@
+App\Entity\User:
+  user_1:
+    email: "testemail@gmail.com"
+    firstName: <firstName()>
+    lastName: <lastName()>
+    password: "lsg_password_1"
+    isVerified: true
+  user_2:
+    email: "testemail2@gmail.com"
+    firstName: <firstName()>
+    lastName: <lastName()>
+    password: "password1234"
+
+App\Entity\ShoppingList:
+  shopping_list_1_{@user_1}:
+    status: DRAFT
+    owner: <current()>
+    title: "Shopping List <numberBetween(1, 10)>"
+  shopping_list_2_{@user_1}:
+    status: TEMPLATE
+    owner: <current()>
+    title: "Shopping List <numberBetween(1, 10)>"
+    __calls:
+      - addShoppingItem:
+          0: '@shopping_item_*'
+  shopping_list_3_{@user_1}:
+    status: PUBLISHED
+    owner: <current()>
+    title: "Shopping List <numberBetween(1, 10)>"
+    __calls:
+      - addShoppingItem:
+          0: '@shopping_item_*'
+  shopping_list_4_{@user_1}:
+    status: CLOSED
+    owner: <current()>
+    title: "Shopping List <numberBetween(1, 10)>"
+    __calls:
+      - addShoppingItem:
+          0: '@shopping_item_*'
+App\Entity\ShoppingItem:
+  shopping_item_{1..3}:
+    name: "Item <numberBetween(1, 4)>"
+    quantity: <randomNumber(3)>
+    status: <randomElement([NOT_PICKED, PICKED])>
+    owner: "@user_1"

@@ -24,6 +24,10 @@ RUN set -eux; \
 FROM php:${PHP_VERSION}-fpm-buster AS server_php
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    zip \
+    unzip \
     libpng-dev \
     libonig-dev \
     libxml2-dev \

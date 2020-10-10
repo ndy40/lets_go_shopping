@@ -41,6 +41,8 @@
         "gesdinet/jwt-refresh-token-bundle": "~v0.9.1"
     },
     "require-dev": {
+        "hautelook/alice-bundle": "^2.7.1",
+        "nelmio/alice": "^3.7",
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "^1.0",
         "symfony/profiler-pack": "*",
