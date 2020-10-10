@@ -30,6 +30,7 @@ class CloneShoppingListService
         }
 
         $copyEntity = clone $entity;
+        $copyEntity->setTitle($copyEntity->getTitle() . ' (copy)');
         return $this->repository->create($copyEntity);
     }
 
