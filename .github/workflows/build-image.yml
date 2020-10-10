@@ -12,11 +12,6 @@ jobs:
           fetch-depth: 1
       - name: Fetching latest tags
         run: echo "name=$(echo $GITHUB_REF | sed 's/.*\///g' )" >> $GITHUB_ENV
-      - name: Create .env file
-        run: |
-          echo ${{ secrets.APP_ENV }} | base64 -d | tee .env
-          ls -al
-          echo ".env file created"
       - name: Publishing PHP Image to Docker Hub
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
