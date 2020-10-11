@@ -14,6 +14,7 @@ echo GENERATING KEYS
 
 if [ ! -f "$JWT_DIR/localhost-key.pem" ]; then
     echo 'Generating Public \ Private Key'
+    mkdir -p $JWT_DIR
     if ! echo "$JWT_PASSPHRASE" | openssl pkey -in "$JWT_DIR/localhost-key.pem" -passin stdin -noout > /dev/null 2>&1; then
         echo "$JWT_PASSPHRASE" | openssl genpkey -out "$JWT_DIR/localhost-key.pem" -pass stdin -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
         echo "$JWT_PASSPHRASE" | openssl pkey -in "$JWT_DIR/localhost-key.pem" -passin stdin -out "$JWT_DIR/localhost.pem" -pubout
