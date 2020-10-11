@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 1
       - name: setup open ssl
         run: |
-          apt-get install openssl -y
+          sudo apt-get install openssl -y
       - name: Running tests
         env:
           APP_ENV: test
