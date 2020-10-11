@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.13.0]
+- Added more tests for ShoppingLists and ShoppingItems endpoint. 
+- Added stub tests to be implemented in the future around shopping lists and 
+socials.
 ## [0.11.0] 2020-10-10
 - Added initial data fixtures with demo data.
 ## [0.10.0]
