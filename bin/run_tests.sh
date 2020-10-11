@@ -6,8 +6,8 @@ ROOT_DIR=$(pwd)
 JWT_PASSPHRASE=70823db480215e7b83dd5a40696f0e2b
 JWT_DIR="$ROOT_DIR/server/var/jwt"
 
-APP_ENV=test
-APP_DEBUG=true
+export APP_ENV=test
+export APP_DEBUG=true
 
 #  Test if pem file exists
 echo GENERATING KEYS
