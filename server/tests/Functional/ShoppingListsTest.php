@@ -234,4 +234,34 @@ class ShoppingListsTest extends \ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Api
 
         $this->assertResponseStatusCodeSame(200);
     }
+
+    public function testSuccessfullyAddingShoppingItemToShoppingLists()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testSuccessfullyReplacingShoppingItemInShoppingLists()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testSuccessfullyRemovingAllShoppingListItems()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testShoppingItemsCanBeAddedByFriends()
+    {
+        $this->markTestIncomplete("To be implemented after Social feature");
+    }
+
+    public function testShoppingItemsCanBeRemovedByFriends()
+    {
+        $this->markTestIncomplete('To be implemented after social feature');
+    }
+
+    public function testShoppingListsInviteCanBeSentToFriends()
+    {
+        $this->markTestIncomplete('To be implemented after social feature');
+    }
 }

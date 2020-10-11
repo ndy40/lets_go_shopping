@@ -213,4 +213,9 @@ class ShoppingItemTest extends \ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiT
 
         $this->assertResponseStatusCodeSame(400);
     }
+
+    public function testThatShoppingItemsCanOnlyBeViewedByOwnerOrSharedFriends()
+    {
+        $this->markTestIncomplete('ToDo');
+    }
 }
