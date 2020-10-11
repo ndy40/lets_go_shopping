@@ -62,7 +62,7 @@ COPY src src/
 COPY .env .env
 COPY --from=composer_build /composer_build/vendor /var/www/html/vendor/
 COPY --from=composer_build /composer_build/composer.lock /composer_build/composer.json /composer_build/symfony.lock /var/www/html/
-COPY --from=dev-certs /certs /var/www/
+COPY --from=dev-certs /certs /var/www/html/config/jwt
 COPY .env-example /var/www/html/.env
 
 RUN set -eux; \
