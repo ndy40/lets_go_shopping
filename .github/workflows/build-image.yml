@@ -8,13 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     container: ubuntu
     services:
-      mysql: mysql:8.0
-      env:
-        MYSQL_DATABASE: shopping_list
-        MYSQL_USER: shopping_list
-        MYSQL_PASSWORD: shopping_list
-        MYSQL_ROOT_PASSWORD: password
-      ports:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: shopping_list
+          MYSQL_USER: shopping_list
+          MYSQL_PASSWORD: shopping_list
+          MYSQL_ROOT_PASSWORD: password
+        ports:
     steps:
       - uses: actions/checkout@v2
         with:
