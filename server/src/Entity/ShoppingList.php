@@ -300,6 +300,4 @@ class ShoppingList
     {
         return $this->updatedAt;
     }
-
-
 }

@@ -12,11 +12,22 @@ namespace App\Tests\Functional;
 
 trait TestHelperTrait
 {
+
     protected string $authorizationUrl = '/authentication_token';
 
     protected string $defaultEmail = 'testemail@gmail.com';
 
     protected string $defaultPassword = 'password1234';
+
+    public function getRequestHeader(object $token)
+    {
+        return [
+            'headers' => [
+                'content-type' => 'application/ld+json',
+                'authorization' => 'Bearer ' . $token->token
+            ]
+        ];
+    }
 
     public function getDefaultToken()
     {
