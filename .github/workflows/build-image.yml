@@ -19,11 +19,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - name: Verify MySQL connection from container
-        run: |
-          apt-get update
-          apt-get install -y mysql-client
-          mysql --host db -uroot -ppassword -e "SHOW DATABASES"
       - name: Running tests
         env:
           APP_ENV: test
