@@ -6,11 +6,25 @@ on:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
+    container: ubuntu
+    services:
+      mysql: mysql:8.0
+      env:
+        - MYSQL_DATABASE: shopping_list
+        - MYSQL_USER: shopping_list
+        - MYSQL_PASSWORD: shopping_list
+        - MYSQL_ROOT_PASSWORD: password
+      ports:
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - name: Setting environment variable
+      - name: Verify MySQL connection from container
+        run: |
+          apt-get update
+          apt-get install -y mysql-client
+          mysql --host mydb -uroot -ppassword -e "SHOW DATABASES"
+      - name: Running tests
         env:
           APP_ENV: test
           APP_DEBUG: true

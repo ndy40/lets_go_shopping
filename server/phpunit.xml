@@ -38,7 +38,7 @@
         <env name="APP_SENDER_EMAIL" value="admin@gmail.com" force="true"/>
         <env name="APP_URL" value="http://localhost"/>
         <env name="APP_SECRET" value="sample_app_secret"/>
-        <env name="DATABASE_URL" value="sqlite:///var/app.db3"/>
+        <env name="DATABASE_URL" value="mysql://shopping_list:shopping_list@127.0.0.1:3306/shopping_list_test?server_version=8.0"/>
         <env name="SYMFONY_DEPRECATIONS_HELPER" value="disabled"/>
     </php>
 </phpunit>
