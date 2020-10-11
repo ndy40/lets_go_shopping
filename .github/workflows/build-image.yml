@@ -22,7 +22,7 @@ jobs:
       - name: setup dependencies
         run: |
           apt-get update -y
-          apt-get install openssl
+          apt-get install openssl -y
       - name: Running tests
         env:
           APP_ENV: test
