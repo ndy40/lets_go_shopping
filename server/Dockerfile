@@ -56,6 +56,7 @@ COPY public public/
 COPY migrations migrations/
 COPY translations tranlations/
 COPY templates templates/
+COPY fixtures fixtures/
 COPY translations translations/
 COPY src src/
 COPY .env .env
