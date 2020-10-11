@@ -20,6 +20,10 @@ jobs:
         with:
           fetch-depth: 1
       - name: setup dependencies
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          tools: composer, phpunit
         run: |
           apt-get update -y
           apt-get install openssl -y
