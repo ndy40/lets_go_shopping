@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     container: ubuntu
     services:
-      mysql:
+      db:
         image: mysql:8.0
         env:
           MYSQL_DATABASE: shopping_list
@@ -23,7 +23,7 @@ jobs:
         run: |
           apt-get update
           apt-get install -y mysql-client
-          mysql --host 127.0.0.1 -uroot -ppassword -e "SHOW DATABASES"
+          mysql --host db -uroot -ppassword -e "SHOW DATABASES"
       - name: Running tests
         env:
           APP_ENV: test
