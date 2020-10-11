@@ -21,15 +21,14 @@ if [ ! -f "$JWT_DIR/localhost-key.pem" ]; then
     fi
 fi
 
-echo "Installing dev requirements"
-composer --working-dir="$ROOT_DIR/server" install --no-ansi -n --profile --no-scripts --no-suggest --no-progress --prefer-dist
-
-
 echo "Switching to project directory"
 cd $ROOT_DIR/server
 
+echo "Installing dev requirements"
+composer install --no-ansi -n --profile --no-scripts --no-suggest --no-progress --prefer-dist
+
 echo "Running migrations and fixtures"
-bin/console d:m:m -n --env=test
+bin/console d:m:m -n
 
 echo "Running Tests"
 bin/phpunit -c phpunit.xml
