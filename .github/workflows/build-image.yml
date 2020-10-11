@@ -24,6 +24,7 @@ jobs:
         with:
           php-version: 7.4
           tools: composer, phpunit
+      - name: setup open ssl
         run: |
           apt-get update -y
           apt-get install openssl -y
