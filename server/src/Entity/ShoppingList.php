@@ -11,6 +11,7 @@ use App\Repository\ShoppingListRepository;
 use App\Responses\TransitionListsResponse;
 use App\Traits\TimestampableTrait;
 use Carbon\Carbon;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,26 +26,30 @@ use App\Controller\Operation\PatchStateOperation;
  * @ApiResource(
  *     normalizationContext={"groups"={"shopping_lists:read"}},
  *     denormalizationContext={"groups"={"shopping_lists:write"}},
+ *     collectionOperations={"get", "post"},
  *     itemOperations={
- *          "get",
- *             "patch"={
- *               "denormalization_context"={"groups": "shopping_list:patch"}
+ *          "get"={"security"="object.getOwner() == user"},
+ *          "patch"={
+ *              "denormalization_context"={"groups": "shopping_list:patch"},
+ *              "security"="object.getOwner() == user"
  *          },
- *          "delete",
- *          "patch",
- *          "put",
+ *          "delete"={"security"="object.getOwner() == user"},
+ *          "patch"={"security"="object.getOwner() == user"},
+ *          "put"={"security"="object.getOwner() == user"},
  *          "clone"={
  *              "method"="GET",
  *              "description"="Create a new shopping list from Template",
  *              "path"="/shopping_lists/{id}/clone",
  *              "controller"=CloneShoppingListsAction::class,
- *              "input"=false
+ *              "input"=false,
+ *              "security"="object.getOwner() == user"
  *          },
  *          "transition"={
  *              "method"="PATCH",
  *              "path"="/shopping_lists/{id}/statuses",
  *              "controller"=PatchStateOperation::class,
- *              "denormalization_context"={"groups": "shopping_list:state"}
+ *              "denormalization_context"={"groups": "shopping_list:state"},
+ *              "security"="object.getOwner() == user"
  *          },
  *          "transition_statuses"={
  *              "method"="GET",
@@ -52,9 +57,10 @@ use App\Controller\Operation\PatchStateOperation;
  *              "controller"=FetchStatusesOperation::class,
  *              "input"=false,
  *              "output"=TransitionListsResponse::class,
- *              "formats"={"json"}
+ *              "formats"={"json"},
+ *              "security"="object.getOwner() == user"
  *          }
- *     }
+ *     },
  * )
  * @ORM\Entity(repositoryClass=ShoppingListRepository::class)
  * @OwnerAware(fieldName="owner_id")
@@ -127,20 +133,20 @@ class ShoppingList
     private ?string $title;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      * @Groups({"shopping_lists:read"})
      */
-    protected \DateTime $createdAt;
+    protected DateTime $createdAt;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      * @Groups({"shopping_lists:read"})
      */
-    protected \DateTime $updatedAt;
+    protected DateTime $updatedAt;
 
 
     public function __construct()
@@ -258,10 +264,10 @@ class ShoppingList
     /**
      * Sets createdAt.
      *
-     * @param  ?\DateTime $createdAt
+     * @param  ?DateTime $createdAt
      * @return $this
      */
-    public function setCreatedAt(?\DateTime $createdAt)
+    public function setCreatedAt(?DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -271,7 +277,7 @@ class ShoppingList
     /**
      * Returns createdAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -281,10 +287,10 @@ class ShoppingList
     /**
      * Sets updatedAt.
      *
-     * @param  ?\DateTime $updatedAt
+     * @param  ?DateTime $updatedAt
      * @return $this
      */
-    public function setUpdatedAt(?\DateTime $updatedAt)
+    public function setUpdatedAt(?DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
 
@@ -294,12 +300,10 @@ class ShoppingList
     /**
      * Returns updatedAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdatedAt()
     {
         return $this->updatedAt;
     }
-
-
 }

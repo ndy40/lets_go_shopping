@@ -7,7 +7,9 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Extensions\Doctrine\Owner\OwnerAware;
 use App\Repository\ShoppingItemRepository;
 use App\Traits\TimestampableTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -24,7 +26,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  */
 class ShoppingItem
 {
-    use TimestampableEntity, TimestampableTrait;
+    use TimestampableTrait;
 
     const STATUS = ['NOT_PICKED', "PICKED"];
 
@@ -47,6 +49,7 @@ class ShoppingItem
     /**
      * @ORM\Column(type="integer", nullable=false, options={"default": 1})
      * @Assert\Positive()
+     * @Assert\NotNull
      * @Groups({"shopping_item:read", "shopping_item:write"})
      */
     private ?int $quantity;
@@ -65,6 +68,23 @@ class ShoppingItem
      * @ORM\JoinColumn(nullable=false)
      */
     private ?User $owner;
+
+    /**
+     * @var DateTime
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     * @Groups({"shopping_item:read"})
+     */
+    protected DateTime $createdAt;
+
+    /**
+     * @var DateTime
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     * @Groups({"shopping_item:read"})
+     */
+    protected DateTime $updatedAt;
+
 
     public function getId(): ?int
     {
@@ -127,5 +147,51 @@ class ShoppingItem
         if (is_null($this->status)) {
             $this->status = 'NOT_PICKED';
         }
+    }
+
+    /**
+     * Sets createdAt.
+     *
+     * @param  ?DateTime $createdAt
+     * @return $this
+     */
+    public function setCreatedAt(?DateTime $createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Returns createdAt.
+     *
+     * @return DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Sets updatedAt.
+     *
+     * @param  ?DateTime $updatedAt
+     * @return $this
+     */
+    public function setUpdatedAt(?DateTime $updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Returns updatedAt.
+     *
+     * @return DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 }
