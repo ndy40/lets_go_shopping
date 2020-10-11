@@ -15,7 +15,6 @@ jobs:
           MYSQL_USER: shopping_list
           MYSQL_PASSWORD: shopping_list
           MYSQL_ROOT_PASSWORD: password
-        ports:
     steps:
       - uses: actions/checkout@v2
         with:
