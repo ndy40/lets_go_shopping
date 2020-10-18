@@ -28,7 +28,7 @@ class ResetPasswordController extends AbstractController
 
     const PASSWORD_CHANGE_SUCCESSFUL = 'emails/user/password_changed_success.html.twig';
 
-    private $service;
+    private ResetUserPasswordService $service;
 
     public function __construct(
         ResetUserPasswordService $service
@@ -37,8 +37,10 @@ class ResetPasswordController extends AbstractController
     }
 
     /**
+     * @param Request $request
+     * @param string $token
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Route("/users/reset-password/{token}", name="reset_password_page", methods={"GET", "POST"})
+     * @Route("/web/reset-password/{token}", name="reset_password_page", methods={"GET", "POST"})
      */
     public function __invoke(Request $request, string $token)
     {

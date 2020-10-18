@@ -39,6 +39,9 @@ services:
             - '@request_stack'
             - '%app.email.sender%'
             - '%app.app_url%'
+    App\Services\SendResetPasswordService:
+        arguments:
+            $appUrl: '%app.app_url%'
 
     # Event Listeners and  Subscribers
     App\Listeners\UserCreateEventListener:

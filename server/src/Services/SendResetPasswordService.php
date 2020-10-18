@@ -25,28 +25,32 @@ final class SendResetPasswordService
 
     const TOKEN_LENGTH = 15;
 
-    private $userProvider;
+    private UserProviderInterface $userProvider;
 
-    private $mailer;
+    private MailerInterface $mailer;
 
-    private $environment;
+    private Environment $environment;
 
-    private $logger;
+    private LoggerInterface $logger;
 
-    private $repository;
+    private UserRepository $repository;
+
+    private string $appUrl;
 
     public function __construct(
         UserProviderInterface $userProvider,
         UserRepository $repository,
         MailerInterface $mailer,
         Environment $environment,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        String $appUrl
     ){
         $this->userProvider = $userProvider;
         $this->mailer       = $mailer;
         $this->environment  = $environment;
         $this->logger       = $logger;
         $this->repository   = $repository;
+        $this->appUrl       = $appUrl;
     }
 
     public function resetPassword(string $email)
@@ -84,7 +88,7 @@ final class SendResetPasswordService
 
     private function getResetLink(UserInterface $user)
     {
-        return "http://localhost/users/reset-password/" . $user->getResetToken();
+        return $this->appUrl . '/web/reset-password/' . $user->getResetToken();
     }
 
     private function getResetToken(UserInterface $user)
