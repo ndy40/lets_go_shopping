@@ -17,7 +17,7 @@ security:
             stateless: true
             anonymous: true
         user_register:
-            pattern: ^/api/users/register
+            pattern: ^/api/users/(register|reset_password)
             stateless: true
             security: false
         main:
